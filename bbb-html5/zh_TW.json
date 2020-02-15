@@ -665,7 +665,7 @@
     "app.legacy.upgradeBrowser": "看起來您是使用受支援的舊版瀏覽器，請更新瀏覽器版本獲取完整支援。",
     "app.legacy.criosBrowser": "在 iOS 上請使用 Safari 取得完整支援",
     "app.poll.activePollInstruction": "這裡能看到即時的投票統計, 請保持開啟不要關閉。如果您要結束投票，點[發佈統計結果]系統會將結果公佈出來。",
-    "app.presentationUploder.message": "您可以上傳 Office文件或 PDF檔案(PDF效果最好),  其它支援的文件: 文字檔(.txt、.rtf)、圖檔(.jpg、.png)、WORD(.doc、.docx)、Excel(.xls、.xlsx)、PowerPoint(.ppt、.pptx)、OpenDocument(.odt、.ods、.odp、.odg、.odc、.odi)且容量有限制, 最大不能超過 50MB。<br/>上傳後系統會進行必要的檢查或轉檔, 請稍候片刻。<br/>勾選右側的圓圈可指定目前的投影片。",
+    "app.presentationUploder.message": "您可以上傳 Office文件或 PDF檔案(PDF效果最好)， 其它支援的文件： 文字檔(.txt、.rtf)、圖檔(.jpg、.png)、WORD(.doc、.docx)、Excel(.xls、.xlsx)、PowerPoint(.ppt、.pptx)、OpenDocument(.odt、.ods、.odp、.odg、.odc、.odi)且容量有限制， 最大不能超過 50MB。  上傳後系統會進行必要的檢查或轉檔， 請稍候片刻。  勾選右側的圓圈可指定目前的投影片。",
     "app.createBreakoutRoom.modalDesc": "提示：您可以用拖曳名稱方式, 將其分配給特定的小組。",
     "app.navBar.emptyAudioBrdige": "沒有任何作用的麥克風，錄製影片將沒有音訊。"
 }
