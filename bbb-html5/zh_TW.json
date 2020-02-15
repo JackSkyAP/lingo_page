@@ -155,7 +155,7 @@
     "app.presentation.presentationToolbar.fitToWidth": "適合寬度",
     "app.presentation.presentationToolbar.fitToPage": "適合頁面",
     "app.presentation.presentationToolbar.goToSlide": "投影片 {0}",
-    "app.presentationUploder.title": "簡報",
+    "app.presentationUploder.title": "文件管理",
     "app.presentationUploder.uploadLabel": "上傳",
     "app.presentationUploder.confirmLabel": "確認",
     "app.presentationUploder.confirmDesc": "保存變更並且啟用簡報",
