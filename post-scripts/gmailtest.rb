@@ -1,6 +1,6 @@
 require 'mail'
 
-meeting_id = 'English 101'
+meeting_id = 'Lingo English 101'
 
 Mail.defaults do
   delivery_method :smtp, {
