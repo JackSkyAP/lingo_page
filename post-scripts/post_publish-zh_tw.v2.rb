@@ -49,7 +49,7 @@ unless serverName.nil? && courseName.nil?
     mId = meetingId.split("-")
     courseId= mId[1] 
     courseLink = "課程: <a href='#{serverName}/course/view.php?id=#{courseId}' >#{meetingName}</a>"
-    bodyString = "#{bodyString} - #{courseLink}"
+    bodyString = "同步教室 #{bodyString} - #{courseLink}"
 end
 
 #bodyString = "The meeting #{hostString} is published.<br/> #{meeting_metadata}, \r Published file in #{published_files}"

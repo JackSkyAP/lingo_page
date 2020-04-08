@@ -56,7 +56,7 @@ end
 #bodyString = bodyString + "Processed file in #{processed_files}"
 bodyString = "#{bodyString} 開始進行轉檔處理, 請稍候.<br/>處理過的檔案將會在 #{processed_files} 目錄內."
 #subjectString = "#{meetingName} archive"
-subjectString = "#{meetingName} 議程結束-開始進行轉檔"
+subjectString = "同步教室 #{meetingName} 開始進行轉檔"
 
 Mail.deliver do
   to 'rd@click-ap.com'
