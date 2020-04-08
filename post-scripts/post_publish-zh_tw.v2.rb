@@ -61,7 +61,7 @@ subjectString = "#{meetingName} 轉檔完成"
 
 Mail.deliver do
   to 'rd@click-ap.com'
-  from 'Lingo <LIGOSMTP@gmail.com>'
+  from 'Lingo <LINGOSMTP@gmail.com>'
   subject "[Lingo]#{subjectString} "
   text_part do
     body "#{bodyString}"

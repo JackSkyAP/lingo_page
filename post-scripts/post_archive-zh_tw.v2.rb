@@ -60,7 +60,7 @@ subjectString = "同步教室 #{meetingName} 議程結束-開始進行封存"
 
 Mail.deliver do
   to 'rd@click-ap.com'
-  from 'Lingo <LINOSMTP@gmail.com>'
+  from 'Lingo <LINGOSMTP@gmail.com>'
   subject "[Lingo]#{subjectString} "
   
   text_part do
