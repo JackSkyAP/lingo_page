@@ -49,7 +49,7 @@ unless serverName.nil? && courseName.nil?
     mId = meetingId.split("-")
     courseId= mId[1] 
     courseLink = "課程: <a href='#{serverName}/course/view.php?id=#{courseId}' >#{meetingName}</a>"
-    bodyString = "同步教室 #{bodyString} - #{courseLink}"
+    bodyString = "#{bodyString} - #{courseLink}"
 end
 
 #bodyString = "The meeting #{hostString} is published.<br/> #{meeting_metadata}, \r Published file in #{published_files}"
@@ -57,7 +57,7 @@ end
 #bodyString = bodyString + "Processed file in #{processed_files}"
 bodyString = "#{bodyString} 已經轉檔完成.<br/>轉檔後錄影檔案在 #{published_files} 目錄內.<br/>錄影播放連結:#{playbackUrl}"
 #subjectString = "#{meetingName} published."
-subjectString = "#{meetingName} 轉檔完成"
+subjectString = "同步教室 #{meetingName} 轉檔完成"
 
 Mail.deliver do
   to 'rd@click-ap.com'
