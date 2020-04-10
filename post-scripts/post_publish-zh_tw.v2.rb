@@ -21,6 +21,7 @@ meeting_metadata = BigBlueButton::Events.get_meeting_metadata("/var/bigbluebutto
 # Put your code here
 #
 require 'mail'
+require "java_properties"
 
 Mail.defaults do
   delivery_method :smtp, {
@@ -33,7 +34,9 @@ Mail.defaults do
     :enable_starttls_auto => true  }
   end
 
-playbackUrl = "https://b0401.edx.tw/playback/presentation/2.0/playback.html?meetingId=#{meeting_id}"
+props = JavaProperties::Properties.new("/usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties")
+serverUrl = props['bigbluebutton.web.serverURL']
+playbackUrl = serverUrl + "/playback/presentation/2.0/playback.html?meetingId=#{meeting_id}"
 meetingId = meeting_metadata.key?("meetingId") ? meeting_metadata["meetingId"].value : nil
 serverName = meeting_metadata.key?("bbb-origin-server-name") ? meeting_metadata["bbb-origin-server-name"].value : nil
 courseName = meeting_metadata.key?("bbb-context") ? meeting_metadata["bbb-context"].value : nil
