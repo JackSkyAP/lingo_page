@@ -14,6 +14,13 @@ USAGE:
     wget -qO- https://johnclickap.github.io/lingo_page/lingo-install.sh | bash -s -- [OPTIONS]
 
 OPTIONS (install Lingo):
+  -v <version>           Install given version of BigBlueButton (e.g. 'xenial-220') (required)
+  -s <hostname>          Configure server with <hostname>
+  -e <email>             Email for Let's Encrypt certbot
+  -m <link_path>         Create a Symbolic link from /var/bigbluebutton to <link_path> 
+  -p <host>              Use apt-get proxy at <host>
+  -r <host>              Use alternative apt repository (such as packages-eu.bigbluebutton.org)
+  -h                     Print help
 
 SUPPORT:
     Community: https://www.click-ap.com/lingo
@@ -97,7 +104,7 @@ main() {
     check_ubuntu 18.04
     TOMCAT_USER=tomcat8
   fi
-  #check_mem
+  check_mem
 
   get_IP
 
@@ -115,7 +122,7 @@ main() {
     if dpkg -s nodejs | grep Version | grep -q 4.2.6; then
       apt-get purge -y nodejs > /dev/null 2>&1
     fi
-        apt-get purge -yq kms-core-6.0 kms-elements-6.0 kurento-media-server-6.0 > /dev/null 2>&1  # Remove older packages
+    apt-get purge -yq kms-core-6.0 kms-elements-6.0 kurento-media-server-6.0 > /dev/null 2>&1  # Remove older packages
 
     if [ ! -f /etc/apt/sources.list.d/nodesource.list ]; then
       curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
@@ -123,6 +130,8 @@ main() {
     if ! apt-cache madison nodejs | grep -q node_8; then
       err "Did not detect nodejs 8.x candidate for installation"
     fi
+    
+    need_pkg openjdk-8-jre
   fi
 
   apt-get update
@@ -147,7 +156,7 @@ main() {
 }
 
 say() {
-  echo "skyap-lingo: $1"
+  echo "lingo-install: $1"
 }
 
 err() {
