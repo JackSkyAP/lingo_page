@@ -27,7 +27,17 @@ host = '35.221.173.223'
 user = 'jack'
 doneFile = "/var/bigbluebutton/recording/status/archived/#{meeting_id}.done"
 Net::SSH.start(host, user) do |ssh|
-  ssh.sftp.mkdir! archived_files
+  #ssh.sftp.mkdir! archived_files
+  begin
+      ssh.sftp.mkdir! archived_files
+  rescue Net::SFTP::StatusException => e
+      # verify if this returns 11. Your server may return something different like 4.
+      if e.code == 11
+          # directory already exists. Carry on..
+      else 
+          raise
+      end 
+  end
   ssh.sftp.upload!(archived_files, archived_files)
   puts ssh.exec!("sudo chown -R bigbluebutton:bigbluebutton #{archived_files}")
   require 'stringio'
