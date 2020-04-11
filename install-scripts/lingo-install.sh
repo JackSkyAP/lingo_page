@@ -131,20 +131,32 @@ main() {
       err "Did not detect nodejs 8.x candidate for installation"
     fi
     
+    if ! apt-key list A15703C6 | grep -q A15703C6; then
+      wget -qO - https://www.mongodb.org/static/pgp/server-3.4.asc | sudo apt-key add -
+    fi
+    if apt-key list A15703C6 | grep -q expired; then 
+      wget -qO - https://www.mongodb.org/static/pgp/server-3.4.asc | sudo apt-key add -
+    fi
+    rm -rf /etc/apt/sources.list.d/mongodb-org-4.0.list
+    echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
+    MONGODB=mongodb-org
+    
     need_pkg openjdk-8-jre
   fi
 
   apt-get update
   apt-get dist-upgrade -yq
 
-  need_pkg nodejs apt-transport-https haveged build-essential yq # default-jre
+  need_pkg nodejs $MONGODB apt-transport-https haveged build-essential yq # default-jre
+  need_pkg bigbluebutton
 
-  # 先不檢查 lxc nat
+  # 檢查 lxc nat for FreeSwitch
   check_lxc
   check_nat
+  check_LimitNOFILE
 
   if [ ! -z "$LINK_PATH" ]; then
-    ln -s "$LINK_PATH" "/var/skyap"
+    ln -s "$LINK_PATH" "/var/bigbluebutton"
   fi
 
   apt-get auto-remove -y
@@ -319,6 +331,21 @@ check_nat() {
   fi
 }
 
+check_LimitNOFILE() {
+  CPU=$(nproc --all)
+
+  if [ "$CPU" -gt 36 ]; then
+    if [ -f /lib/systemd/system/bbb-web.service ]; then
+      # Let's create an override file to increase the number of LimitNOFILE 
+      mkdir -p /etc/systemd/system/bbb-web.service.d/
+      cat > /etc/systemd/system/bbb-web.service.d/override.conf << HERE
+[Service]
+LimitNOFILE=
+LimitNOFILE=8192
+HERE
+      systemctl daemon-reload
+    fi
+  fi
+}
+
 main "$@" || exit 1
-
-
