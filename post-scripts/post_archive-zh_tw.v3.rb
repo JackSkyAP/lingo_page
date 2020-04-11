@@ -10,18 +10,33 @@ opts = Trollop::options do
 end
 meeting_id = opts[:meeting_id]
 
-logger = Logger.new("/var/log/bigbluebutton/post_publish.log", 'weekly' )
+logger = Logger.new("/var/log/bigbluebutton/post_archive.log", 'weekly' )
 logger.level = Logger::INFO
 BigBlueButton.logger = logger
 
-published_files = "/var/bigbluebutton/published/presentation/#{meeting_id}"
-meeting_metadata = BigBlueButton::Events.get_meeting_metadata("/var/bigbluebutton/recording/raw/#{meeting_id}/events.xml")
+archived_files = "/var/bigbluebutton/recording/raw/#{meeting_id}"
+meeting_metadata = BigBlueButton::Events.get_meeting_metadata("#{archived_files}/events.xml")
 
 #
 # Put your code here
 #
+require 'net/ssh'
+require 'net/sftp'
+
+host = '35.221.173.223'
+user = 'jack'
+doneFile = "/var/bigbluebutton/recording/status/archived/#{meeting_id}.done"
+Net::SSH.start(host, user) do |ssh|
+  ssh.sftp.mkdir! archived_files
+  ssh.sftp.upload!(archived_files, archived_files)
+  puts ssh.exec!("sudo chown -R bigbluebutton:bigbluebutton #{archived_files}")
+  require 'stringio'
+  io = StringIO.new("Archived #{meeting_id}")
+  ssh.sftp.upload!(io, doneFile)
+  puts ssh.exec!("sudo chown -R bigbluebutton:bigbluebutton #{doneFile}")
+end
+
 require 'mail'
-require "java_properties"
 
 Mail.defaults do
   delivery_method :smtp, {
@@ -34,9 +49,6 @@ Mail.defaults do
     :enable_starttls_auto => true  }
   end
 
-props = JavaProperties::Properties.new("/usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties")
-serverUrl = props['bigbluebutton.web.serverURL']
-playbackUrl = serverUrl + "/playback/presentation/2.0/playback.html?meetingId=#{meeting_id}"
 meetingId = meeting_metadata.key?("meetingId") ? meeting_metadata["meetingId"].value : nil
 serverName = meeting_metadata.key?("bbb-origin-server-name") ? meeting_metadata["bbb-origin-server-name"].value : nil
 courseName = meeting_metadata.key?("bbb-context") ? meeting_metadata["bbb-context"].value : nil
@@ -55,21 +67,23 @@ unless serverName.nil? && courseName.nil?
     bodyString = "#{bodyString} - #{courseLink}"
 end
 
-#bodyString = "The meeting #{hostString} is published.<br/> #{meeting_metadata}, \r Published file in #{published_files}"
-#bodyString = "同步教室 #{hostString} - 課程: #{meetingName} 已經轉檔完成.\r\n處理過的檔案將會在 #{published_files} 目錄內."
-#bodyString = bodyString + "Processed file in #{processed_files}"
-bodyString = "#{bodyString} 已經轉檔完成.<br/>轉檔後錄影檔案在 #{published_files} 目錄內.<br/>錄影播放連結:#{playbackUrl}"
-#subjectString = "#{meetingName} published."
+#bodyString = "The meeting #{bodyString} is archive.<br/>#{meeting_metadata}, \r Archive file in #{archived_files}"
+#bodyString = "#{bodyString} - 同步教室課程: #{meetingName} 所有人都已離開目前議程, 開始進行封存.\r\n封存檔案將會在 #{archived_files} 目錄內."
+#bodyString = "#{bodyString} <br/>Archive file in #{archived_files}"
+bodyString = "#{bodyString} 所有人都已離開目前議程, 開始進行封存.<br/>封存檔案將會在 #{archived_files} 目錄內."
+#subjectString = "#{meetingName} archive"
 format = opts[:meeting_id]
-subjectString = "#{meetingName}-#{format} 轉檔完成"
+subjectString = "#{meetingName}-#{format} 議程結束-開始進行封存"
 
 Mail.deliver do
   to 'rd@click-ap.com'
   from 'Lingo <LINGOSMTP@gmail.com>'
   subject "[Lingo] #{subjectString} "
+  
   text_part do
     body "#{bodyString}"
   end
+  
   html_part do
     content_type 'text/html; charset=UTF-8'
     body "#{bodyString}"

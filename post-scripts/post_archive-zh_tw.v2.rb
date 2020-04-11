@@ -42,21 +42,21 @@ meetingName ||= meeting_metadata.key?("title") ? meeting_metadata["title"].value
 # for moodle
 bodyString = "The meeting #{meetingName}"
 unless serverName.nil? && courseName.nil?
-    bodyString = "[#{serverName}] - åŒæ­¥æ•™å®¤ "
+    bodyString = "[#{serverName}] - ¦P¨B±Ğ«Ç "
     serverName = "https://#{serverName}"
     meetingName = "#{courseName} - #{meetingName}"
     mId = meetingId.split("-")
     courseId= mId[1] 
-    courseLink = "èª²ç¨‹: <a href='#{serverName}/course/view.php?id=#{courseId}' >#{meetingName}</a>"
+    courseLink = "½Òµ{: <a href='#{serverName}/course/view.php?id=#{courseId}' >#{meetingName}</a>"
     bodyString = "#{bodyString} - #{courseLink}"
 end
 
 #bodyString = "The meeting #{bodyString} is archive.<br/>#{meeting_metadata}, \r Archive file in #{archived_files}"
-#bodyString = "#{bodyString} - åŒæ­¥æ•™å®¤èª²ç¨‹: #{meetingName} æ‰€æœ‰äººéƒ½å·²é›¢é–‹ç›®å‰è­°ç¨‹, é–‹å§‹é€²è¡Œå°å­˜.\r\nå°å­˜æª”æ¡ˆå°‡æœƒåœ¨ #{archived_files} ç›®éŒ„å…§."
+#bodyString = "#{bodyString} - ¦P¨B±Ğ«Ç½Òµ{: #{meetingName} ©Ò¦³¤H³£¤wÂ÷¶}¥Ø«eÄ³µ{, ¶}©l¶i¦æ«Ê¦s.\r\n«Ê¦sÀÉ®×±N·|¦b #{archived_files} ¥Ø¿ı¤º."
 #bodyString = "#{bodyString} <br/>Archive file in #{archived_files}"
-bodyString = "#{bodyString} æ‰€æœ‰äººéƒ½å·²é›¢é–‹ç›®å‰è­°ç¨‹, é–‹å§‹é€²è¡Œå°å­˜.<br/>å°å­˜æª”æ¡ˆå°‡æœƒåœ¨ #{archived_files} ç›®éŒ„å…§."
+bodyString = "#{bodyString} ©Ò¦³¤H³£¤wÂ÷¶}¥Ø«eÄ³µ{, ¶}©l¶i¦æ«Ê¦s.<br/>«Ê¦sÀÉ®×±N·|¦b #{archived_files} ¥Ø¿ı¤º."
 #subjectString = "#{meetingName} archive"
-subjectString = "åŒæ­¥æ•™å®¤ #{meetingName} è­°ç¨‹çµæŸ-é–‹å§‹é€²è¡Œå°å­˜"
+subjectString = "¦P¨B±Ğ«Ç #{meetingName} Ä³µ{µ²§ô-¶}©l¶i¦æ«Ê¦s"
 
 Mail.deliver do
   to 'rd@click-ap.com'
