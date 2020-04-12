@@ -45,6 +45,7 @@ Net::SSH.start(host, user) do |ssh|
   ssh.sftp.upload!(io, doneFile)
   puts ssh.exec!("sudo chown -R bigbluebutton:bigbluebutton #{doneFile}")
 end
+logger.info("Meeting: #{meeting_id}, files: #{archived_files} shift to #{host}, and notified.");
 
 require 'mail'
 
@@ -99,5 +100,7 @@ Mail.deliver do
     body "#{bodyString}"
   end
 end
+
+logger.info("Mail deliver: #{meetingName}; #{bodyString}")
 
 exit 0
